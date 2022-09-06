@@ -24,12 +24,22 @@ public class ControlRecorrido {
 		this.ordenEnProceso = null;
 	}
 
+	/**
+	 * Crea los productos que puede vender la panaderia.
+	 * Tambien crea las tiendas que debe recorrer el vendedor.
+	 */
 	public void cargarDatosIniciales() {
 
 		CargadorDatos cargador = new CargadorDatos(recorrido);
 		cargador.cargarDatosIniciales();
 	}
 
+	/**
+	 * Busca si existe una tienda por su codigo en el recorrido
+	 * 
+	 * @param codigoTienda
+	 * @return Verdadero o falso si encuentra la tienda
+	 */
 	public boolean existeTienda(String codigoTienda) {
 		if (recorrido.buscarTienda(codigoTienda) != null) {
 			return true;
@@ -38,6 +48,15 @@ public class ControlRecorrido {
 		}
 	}
 
+	/**
+	 * Crea la orden del pedido en base a un link ingresado
+	 * por el usuario que direcciona a un archivo de texto
+	 * En el cual se pueden leer todos los productos
+	 * solicitados, bajo cierto formato
+	 * @param nombreArchivoProductos
+	 * @param codigoTienda
+	 * @throws IOException
+	 */
 	public void crearOrden(String nombreArchivoProductos, String codigoTienda) throws IOException {
 		this.ordenEnProceso = new OrdenPedido(recorrido.buscarTienda(codigoTienda));
 		LectorArchivo lectorArchivo = new LectorArchivo(nombreArchivoProductos);
@@ -50,6 +69,14 @@ public class ControlRecorrido {
 
 	}
 
+	/**
+	 * Crea los detalles del pedido y los
+	 * guarda en la lista de detalles del mismo
+	 * 
+	 * @param orden
+	 * @param datosBase
+	 * @throws NotFoundObjectException
+	 */
 	public void crearDetalle(OrdenPedido orden, List<String[]> datosBase) throws NotFoundObjectException {
 		for (String[] datoBaseDetalle : datosBase) {
 
@@ -61,14 +88,25 @@ public class ControlRecorrido {
 				throw new NotFoundObjectException("No se pudo encontrar el objeto.");
 			}
 		}
-
 	}
 
+	/**
+	 * Busca una tienda por codigo y trae sus datos
+	 * basicos para mostrarlos al usuario
+	 * 
+	 * @param codigoTienda
+	 * @return Un string con los datos de la tienda, el codigo y el nombre
+	 */
 	public String obtenerDatosTienda(String codigoTienda) {
 		return recorrido.buscarTienda(codigoTienda).toString();
 
 	}
 
+	/**
+	 * Ordena los detalles de un pedido para mostrar al usuario
+	 * 
+	 * @return Una lista de strings con los detalles del pedido
+	 */
 	public List<String> obtenerDetallesOrdenados() {
 		return ordenEnProceso.getDetallesOrdenados();
 
